@@ -4,6 +4,7 @@ import './App.css';
 import axios from 'axios';
 import { async } from 'q';
 import SearchBox from './components/SearchBox';
+import allcities from './assets/city.list.json';
 
 
 
@@ -17,7 +18,15 @@ function App() {
   
 
   useEffect( () => {
-    console.log( 'useEffect' );
+
+    console.log( '=== process cities list ===');
+    const city = allcities.find( city => city.name == 'Madrid' );
+    console.log( city );
+
+  }, []);
+
+  useEffect( () => {
+    console.log( 'fetch data effect' );
     async function fetchMyAPI( ) {
       let config = {};
       const response = await fetch( url + 'id=' + cityID + '&appid=' + apiKey );
