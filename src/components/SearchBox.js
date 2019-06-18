@@ -25,10 +25,9 @@ function SearchBox( props ){
 
 
     function handleClick(e){
-        console.log( 'handle click: ', e );
+        // console.log( 'handle click: ', e );
         if( e.key == 'Enter' ){
             console.log( '=== search : ', e.target.value );
-            console.log( props );
             props.search( e.target.value );
         }
     }

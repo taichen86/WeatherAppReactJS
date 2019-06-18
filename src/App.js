@@ -6,38 +6,53 @@ import { async } from 'q';
 import SearchBox from './components/SearchBox';
 
 
+
 function App() {
 
-  const url = 'https://api.openweathermap.org/data/2.5/forecast?id=1851632';
+  const url = 'https://api.openweathermap.org/data/2.5/forecast?';
   const url2 = 'https://api.openweathermap.org/data/2.5/weather?id=2172797';
   const apiKey = '21e9711869d651b73195343d41b52a78';
   const [forecast, setForecast] = useState(null);
+  const [cityID, setCityID] = useState('1851632');
   
-  // userEffect called after page re-renders, putting [] limits to first time, like component did mount
-  useEffect( async () => {
-    console.log( 'useEffect' );
-    const response = await fetch( url + '&appid=' + apiKey ); // TODO: generic fetch function
-    const data = await response.json();
-    console.log( data );  
-    const city = data.city;
-    console.log( 'city', city );
-    const reports = data.list;
-    console.log( 'reports ', reports );
 
-    setForecast( { city: city, reports: reports } );
-  }, [] );
+  useEffect( () => {
+    console.log( 'useEffect' );
+    async function fetchMyAPI( ) {
+      let config = {};
+      const response = await fetch( url + 'id=' + cityID + '&appid=' + apiKey );
+      const data = await response.json();
+      console.log( 'data', data );
+        
+    }  
+    fetchMyAPI();
+    // const response = await fetch( url + 'id=' + cityID + '&appid=' + apiKey ); // TODO: generic fetch function
+    // const data = await response.json();
+    // console.log( data );  
+    // const city = data.city;
+    // console.log( 'city', city );
+    // const reports = data.list;
+    // console.log( 'reports ', reports );
+
+    // setForecast( { reports: reports } );
+  }, [cityID] );
+
+  
+
 
   function getForecastFor( city ){
     console.log( 'getForecastFor... ', city );
-
+    // useFetch    
+    setCityID( '2172797' );
   }
+
 
   return (
     <div className="App">
 
 
 
-      { forecast && <div> {forecast.city.name} </div>}
+      { cityID && <div> {cityID} </div>}
       <SearchBox search={getForecastFor}></SearchBox>
 
       {/* <header className="App-header">
