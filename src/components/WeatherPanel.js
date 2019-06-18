@@ -39,7 +39,7 @@ function WeatherPanel( props ){
     console.log( daysPanel );
 
     const currentWeather = props.data.reports[0];
-    const currentTemp = (currentWeather.main.temp - 273.15).toFixed(2);
+    const currentTemp = (currentWeather.main.temp - 273.15).toFixed(0);
     const currentIconURL = 'http://openweathermap.org/img/w/' + currentWeather.weather[0].icon + '.png';
 
 
@@ -72,8 +72,11 @@ function WeatherPanel( props ){
                     <h3>{props.data.city.name}</h3>
                     <h6> current time </h6>
                     <div className="current-panel">
-                        <div className="item temp">+{currentTemp}&deg;</div>
-                        <div className="item icon"><img src={currentIconURL}></img></div>
+                        <div className="item temp">+<span className="text-large">{currentTemp}</span>&deg;</div>
+                        <div className="item icon">
+                            <img src={currentIconURL}></img>
+                            <div className="main">{currentWeather.weather[0].main}, {currentWeather.weather[0].description}</div>
+                        </div>
                         <div className="item">
                             <div>{currentWeather.main.pressure}mm Hg</div>
                             <div>{currentWeather.main.humidity}% humidity</div>
