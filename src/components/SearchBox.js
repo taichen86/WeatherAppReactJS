@@ -10,9 +10,10 @@ function SearchBox( props ){
         }
     }
 
-    return <div>
-             <input onKeyPress={handleClick} type="text" placeholder="search city..."></input>
-         </div>    
+    return( 
+        <div>
+            <input onKeyPress={handleClick} type="text" placeholder="search city..."></input>
+        </div> );   
 
 
 }
