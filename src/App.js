@@ -3,6 +3,7 @@ import logo from './logo.svg';
 import './App.css';
 import axios from 'axios';
 import { async } from 'q';
+import SearchBox from './components/SearchBox';
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
   // userEffect called after page re-renders, putting [] limits to first time, like component did mount
   useEffect( async () => {
     console.log( 'useEffect' );
-    const response = await fetch( url + '&appid=' + apiKey );
+    const response = await fetch( url + '&appid=' + apiKey ); // TODO: generic fetch function
     const data = await response.json();
     console.log( data );  
     const city = data.city;
@@ -26,12 +27,18 @@ function App() {
     setForecast( { city: city, reports: reports } );
   }, [] );
 
+  function getForecastFor( city ){
+    console.log( 'getForecastFor... ', city );
+
+  }
+
   return (
     <div className="App">
 
 
 
       { forecast && <div> {forecast.city.name} </div>}
+      <SearchBox search={getForecastFor}></SearchBox>
 
       {/* <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
