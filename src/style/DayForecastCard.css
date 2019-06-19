@@ -23,8 +23,33 @@ time, mark, audio, video {
 
 /*** END Meyer reset ***/
 
-.day-panel{
+#day-panel{
     width: 98%;
     padding: 10px;
-    background-color: rgba( 255, 255, 255, 0.25 );
+    border-style: solid;
+    border-width: 4px 0 0 0;
 }
+
+/* owm id 800 - yellow */
+.clear{
+    background-color: rgba(255, 240, 65, 0.25);
+    border-color: rgba(255, 240, 65, 1);
+}
+
+/* owm id 801 - 804 - blue */
+.clouds{
+    background-color: rgba(63, 177, 253, 0.25);
+    border-color: rgba(63, 177, 253, 1);
+
+}
+
+/* owm thunderstorm 2xx, drizzle 3xx, rain 5xx, snow 6xx, atmosphere 7xx - gray */
+.other{
+    background-color: rgba(100, 100, 100, 0.25);
+    border-color: rgba(100, 100, 100, 1);
+}
+
+
+
+
+

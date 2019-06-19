@@ -95,8 +95,7 @@ function App() {
         item.name.toLowerCase() == weathermatch.name.toLowerCase() );
       // console.log( imagematch );
       if( imagematch != undefined ){
-        // console.log( 'CITY IMAGES MATCH ', imagematch.name );
-        setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() );
+        setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() ); // teleport data hyphenates city names
       }else{
         // use default city bg
         // console.log( 'use default bg image' );

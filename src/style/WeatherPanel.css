@@ -49,9 +49,6 @@ h3{
 
 #outterPanel.hidden{
     opacity: 0;
-    /* transition-property: opacity;
-    transition-duration: 0.5s;
-	transition-timing-function: ease; */
 }
 
 .days-panel{
