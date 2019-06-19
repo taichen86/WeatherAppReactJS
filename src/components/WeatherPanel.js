@@ -31,26 +31,17 @@ function WeatherPanel( props ){
     });
     // console.log( days );
 
-    const daysPanel = days.map( item => {
-        return <DayForecastCard data={item}></DayForecastCard>
+    const daysPanel = days.map( (item, index) => {
+        return <DayForecastCard key={index} data={item}></DayForecastCard>
     });
     // console.log( daysPanel );
 
 
     const currentWeather = props.data.reports[0];
     console.log( 'current weather ', currentWeather );
-    const dayNum = new Date( currentWeather.dt_txt ).getDay();
-    const daysText = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    const currentDate = daysText[dayNum] + ', ' + currentWeather.dt_txt.slice( 0, 10 );
     const currentTemp = (currentWeather.main.temp - 273.15).toFixed(0);
     const currentIconURL = 'http://openweathermap.org/img/w/' + currentWeather.weather[0].icon + '.png';
 
-    const [currentTime, setCurrentTime] = useState(new Date());
-
-    function timer(){
-        // setCurrentTime( new Date() );
-    }
-    setInterval( timer, 1000);
 
     const styles = {
         panel: {
@@ -68,7 +59,7 @@ function WeatherPanel( props ){
                 <div id="innerPanel">
 
                     <div className="title">
-                        <h3>{props.data.city.name}</h3>
+                        <div>{props.data.city.name}</div>
                         <div id="current-time">
                             <Clock></Clock>
                         </div>

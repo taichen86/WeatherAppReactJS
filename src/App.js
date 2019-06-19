@@ -18,6 +18,7 @@ function App() {
   const [bgImageCity, setBGImageCity] = useState('madrid'); // lowercase only, used to search teleport json for bg image
   const [bgImageURL, setBGImageURL] = useState('weather-default.jpg');
 
+  const [searchMsg, setSearchMsg] = useState(''); // show msg if no city matched in openweathermap
 
 
   // this callback runs only once after first render, similar to componentDidMount
@@ -71,6 +72,7 @@ function App() {
 
   function getForecastFor( cityname ){
     console.log( 'getForecastFor... ', cityname );
+    setSearchMsg('');
     
     const weathermatch = allcities.find( item => 
       item.name.toLowerCase() == cityname.toLowerCase() ); // TODO: insert autocomplete?
@@ -98,13 +100,13 @@ function App() {
         setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() ); // teleport data hyphenates city names
       }else{
         // use default city bg
-        // console.log( 'use default bg image' );
         setBGImageURL('weather-default.jpg');
       }
 
     }else{
       // TODO: show error message - city not found
       console.log( "NOT FOUND - SHOW ERROR");
+      setSearchMsg( '*city not found' );
     }
   }
 
@@ -113,7 +115,7 @@ function App() {
     blurred: {
       backgroundImage: 'url(' + bgImageURL + ')',
       filter: "blur(12px)",
-      height: "600px",
+      height: "800px",
       backgroundPosition: "center",
       backgroundSize: "cover",
     }
@@ -127,9 +129,9 @@ function App() {
       <div style={styles.blurred} className="bg-blurred"></div>
 
       { forecast && bgImageURL &&
-        <WeatherPanel data={forecast} bgURL={bgImageURL}></WeatherPanel> }
+      <WeatherPanel data={forecast} bgURL={bgImageURL}></WeatherPanel> }
       
-      <SearchBox search={getForecastFor}></SearchBox>
+      <SearchBox search={getForecastFor} msg={searchMsg}></SearchBox>
 
 
     </div>
