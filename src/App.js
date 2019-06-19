@@ -18,6 +18,8 @@ function App() {
   const [bgImageCity, setBGImageCity] = useState('madrid'); // lowercase only, used to search teleport json for bg image
   const [bgImageURL, setBGImageURL] = useState('weather-default.jpg');
 
+
+
   // this callback runs only once after first render, similar to componentDidMount
   useEffect( () => {
     // TODO: find current location?
@@ -41,7 +43,7 @@ function App() {
       const response = await fetch( path );
       const data = await response.json();
       setForecast( { city: data.city, reports: data.list } );
-      console.log( 'forecast', forecast );
+      console.log( 'forecast', data );
     }  
     fetchMyAPI();
   }, [cityID] );
@@ -69,24 +71,41 @@ function App() {
 
   function getForecastFor( cityname ){
     console.log( 'getForecastFor... ', cityname );
-    const weathermatch = allcities.find( item => item.name.toLowerCase() == cityname.toLowerCase() ); // TODO: insert autocomplete
+    
+    const weathermatch = allcities.find( item => 
+      item.name.toLowerCase() == cityname.toLowerCase() ); // TODO: insert autocomplete?
+    
     if( weathermatch != undefined ){
-      console.log( 'match found ', weathermatch );
+
+      // do not refresh same city search - same cityID will not trigger cityID & bgImageCity effects, resulting in blank screen
+      if( weathermatch.id == cityID ){
+        console.log( 'same city , do not refresh' );
+        return;
+      }
+
+      // set forecast and img url to null to 'fade out' weather panel
+      setForecast( null );
+      setBGImageURL( null );
+
+      console.log( 'owm match found ', weathermatch );
       setCityID( weathermatch.id );
 
-      // search for bg image
-
-      const imagematch = cityImages.find( item =>item.name.toLowerCase() == weathermatch.name.toLowerCase() );
-      console.log( imagematch );
+      // search for bg image from teleport json list
+      const imagematch = cityImages.find( item =>
+        item.name.toLowerCase() == weathermatch.name.toLowerCase() );
+      // console.log( imagematch );
       if( imagematch != undefined ){
-        console.log( 'CITY IMAGES MATCH ', imagematch.name );
+        // console.log( 'CITY IMAGES MATCH ', imagematch.name );
         setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() );
       }else{
         // use default city bg
-        console.log( 'use default bg image' );
+        // console.log( 'use default bg image' );
         setBGImageURL('weather-default.jpg');
       }
 
+    }else{
+      // TODO: show error message - city not found
+      console.log( "NOT FOUND - SHOW ERROR");
     }
   }
 
@@ -95,7 +114,7 @@ function App() {
     blurred: {
       backgroundImage: 'url(' + bgImageURL + ')',
       filter: "blur(12px)",
-      height: "500px",
+      height: "600px",
       backgroundPosition: "center",
       backgroundSize: "cover",
     }
@@ -103,14 +122,14 @@ function App() {
 
 
   return (
+
     <div className="App">
-      <div style={styles.blurred}></div>
 
-      <div style={styles.outterPanel}></div>
+      <div style={styles.blurred} className="bg-blurred"></div>
 
-      {/* { cityID && <div> {cityID} </div>} */}
-
-      { forecast && <WeatherPanel data={forecast} bgURL={bgImageURL}></WeatherPanel> }
+      { forecast && bgImageURL &&
+        <WeatherPanel data={forecast} bgURL={bgImageURL}></WeatherPanel> }
+      
       <SearchBox search={getForecastFor}></SearchBox>
 
 

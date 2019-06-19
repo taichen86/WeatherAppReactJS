@@ -3,7 +3,7 @@ import '../style/DayForecastCard.css';
 
 function DayForecastCard( props ){
 
-    console.log( 'day forecast card props: ', props );
+    // console.log( 'day forecast card props: ', props );
     const iconURL = 'http://openweathermap.org/img/w/' + props.data.weather[0].icon + '.png';
     const tempC = (props.data.main.temp - 273.15).toFixed(2);
     const daysText = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

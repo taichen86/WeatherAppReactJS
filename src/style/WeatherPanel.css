@@ -29,7 +29,29 @@ body{
 }
 
 h3{
-    font-size: 1.6em;
+    font-size: 1.8em;
+}
+
+.title{
+    padding-top: 30px;
+}
+
+#outterPanel{
+    position: absolute;
+    width: 96%;
+    left: 2%;
+    top: 30px; 
+    opacity: 1;
+    transition-property: opacity;
+    transition-duration: 0.33s;
+	transition-timing-function: ease-in-out;
+}
+
+#outterPanel.hidden{
+    opacity: 0;
+    /* transition-property: opacity;
+    transition-duration: 0.5s;
+	transition-timing-function: ease; */
 }
 
 .days-panel{
@@ -58,6 +80,7 @@ h3{
 .text-large{
     font-size: 2em;
 }
+
 
 
 
