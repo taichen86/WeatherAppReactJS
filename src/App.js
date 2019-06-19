@@ -12,11 +12,11 @@ function App() {
   const url = 'https://api.openweathermap.org/data/2.5/forecast?';
   const apiKey = '21e9711869d651b73195343d41b52a78';
   const [forecast, setForecast] = useState(null);
-  const [cityID, setCityID] = useState('6359304');  // initialize location to Madrid
+  const [cityID, setCityID] = useState('6359304');  // initialize openweathermap location to Madrid
   
-  const [cityImages, setCityImages] = useState(null); // list of all available cities with images for background
-  const [bgImageCity, setBGImageCity] = useState('Madrid'); // initialize location to Madrid
-  const [bgImageURL, setBGImageURL] = useState('city-madrid.jpg');
+  const [cityImages, setCityImages] = useState(null); // json array of all available cities with images
+  const [bgImageCity, setBGImageCity] = useState('madrid'); // lowercase only, used to search teleport json for bg image
+  const [bgImageURL, setBGImageURL] = useState('weather-default.jpg');
 
   // this callback runs only once after first render, similar to componentDidMount
   useEffect( () => {
@@ -74,10 +74,18 @@ function App() {
       console.log( 'match found ', weathermatch );
       setCityID( weathermatch.id );
 
-      // update bg image
-      const imagematch = cityImages.find( item => item.name.toLowerCase() == weathermatch.name.toLowerCase() );
-      console.log( 'CITY IMAGES MATCH ', imagematch.name );
-      setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() );
+      // search for bg image
+
+      const imagematch = cityImages.find( item =>item.name.toLowerCase() == weathermatch.name.toLowerCase() );
+      console.log( imagematch );
+      if( imagematch != undefined ){
+        console.log( 'CITY IMAGES MATCH ', imagematch.name );
+        setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() );
+      }else{
+        // use default city bg
+        console.log( 'use default bg image' );
+        setBGImageURL('weather-default.jpg');
+      }
 
     }
   }
