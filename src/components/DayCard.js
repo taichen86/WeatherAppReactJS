@@ -21,11 +21,11 @@ function DayCard( props ){
     // TODO: put days panel outter div here
     return(
         <div id="day-panel" className={getPanelColor()}>
-            <h3>{daysText[day]}</h3>
+            <div>{daysText[day]}</div>
             <div id="icon" className="day-icon">
                 <img src={iconURL}></img>
             </div>
-            <h3>+{tempC}&deg;</h3>
+            <div>+{tempC}&deg;</div>
         </div>
 
     );

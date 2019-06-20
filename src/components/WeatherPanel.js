@@ -43,9 +43,9 @@ function WeatherPanel( props ){
             <div style={styles.panel}>
                 <div id="inner-panel">
 
-                    <div className="title">
+                    <div id="title">
                         <div>{props.data.city.name}</div>
-                        <div id="current-time">
+                        <div id="time-now">
                             <Clock></Clock>
                         </div>
                     </div>
@@ -57,20 +57,20 @@ function WeatherPanel( props ){
                             <span id="main-temp">{currentTemp}</span>
                             <span>&deg;</span>
                         </div>
-                        <div className="item" id="main-icon">
-                            <img src={currentIconURL}></img>
+                        <div className="item" id="main-condition">
+                            <img id="main-icon" src={currentIconURL}></img>
                             <div id="main-description">{currentWeather.weather[0].main}, {currentWeather.weather[0].description}</div>
                         </div>
                         <div className="item" id="main-stats">
-                            <div>
+                            <div className="stat-row">
                                 <img className="stats-icon" src={iconPressure}></img>
                                 {currentWeather.main.pressure}mm Hg
                             </div>
-                            <div>
+                            <div className="stat-row">
                                 <img className="stats-icon" src={iconHumidity}></img>
                                 {currentWeather.main.humidity}% humidity
                             </div>
-                            <div>
+                            <div className="stat-row">
                                 <img className="stats-icon" src={iconWind}></img>
                                 {currentWeather.wind.speed}m/s 
                             </div>

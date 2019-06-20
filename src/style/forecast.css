@@ -2,6 +2,7 @@
 
 #forecast-panel{
     display: flex;
+    font-weight: 300;
 }
 
 /*** END ForecastPanel ***/
@@ -13,6 +14,7 @@
     padding: 10px;
     border-style: solid;
     border-width: 4px 0 0 0;
+    text-align: center;
 }
 
 /* owm id 800 - yellow */
@@ -38,7 +40,7 @@
     background-color: #8080803b;
     border-radius: 50%;
     max-width: 60px;
-    margin: auto;
+    margin: 20px auto;
 }
 
 /*** END DayCard ***/

@@ -1,9 +1,14 @@
 
 /*** WeatherPanel ***/
 
-.title{
+#title{
     padding-top: 30px;
     font-size: 1.6em;
+    text-align: center;
+}
+
+#time-now{
+    font-size: 0.6em;
 }
 
 #inner-panel{
@@ -68,11 +73,16 @@
 }
 
 #plus-sign{
-    vertical-align: -50px;
+    margin-top: 30%;
+}
+
+#main-condition{
+    justify-content: space-between;
 }
 
 #main-icon{
-    justify-content: space-between;
+    height: 60%;
+    margin-top: -20px;
 }
 
 .stats-icon{
@@ -81,13 +91,16 @@
     margin-right: 10px;
 }
 
+.stat-row{
+    padding: 4px 0;
+}
+
 /*** END WeatherPanel ***/
 
 
 /*** SearchBox ***/
 
 #search-panel{
-    padding-top: 40px;
     opacity: 1;
     position: absolute;
     top: 600px;
