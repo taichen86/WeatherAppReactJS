@@ -114,31 +114,31 @@ function App() {
     setMsg('');
     
     const weathermatch = allOWMCities.find( item => 
-      item.name.toLowerCase() === cityname.toLowerCase() );
+      item.name.toLowerCase() == cityname.toLowerCase() );
     
     if( weathermatch !== undefined ){
-
+      console.log( 'match ', weathermatch );
       /*
       do not refresh same city search - 
       same cityID will not trigger cityID & bgImageCity effects, 
       resulting in blank screen
       */
-      if( weathermatch.id === cityID ){ 
+      if( weathermatch.id == cityID ){ 
         console.log( 'same city, return' );
         return;
       }
 
+      setBGClassList( ['fadeout'] );
       // need this reset to simulate fade in animation
       setForecast( null );
       setBGImageURL( null );
-
 
       setCityID( weathermatch.id ); // this triggers search OWM useEffect 
 
       // see if we have image for this city in teleport cities list
       setBGImageCity( null );
       const teleportmatch = cityImages.find( item =>
-        item.name.toLowerCase() === weathermatch.name.toLowerCase() );
+        item.name.toLowerCase() == weathermatch.name.toLowerCase() );
       if( teleportmatch !== undefined ){
         /*
         this triggers teleport image search

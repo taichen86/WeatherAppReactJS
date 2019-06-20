@@ -7,10 +7,20 @@
   animation-fill-mode: forwards;
 }
 
+#blurred-bg.fadeout{
+  animation: blurred-bg-fadeout 0.3s ease;
+  animation-fill-mode: forwards;
+}
+
 
 @keyframes blurred-bg-fadein {
   from { opacity: 0; }
   to { opacity: 1; }
+}
+
+@keyframes blurred-bg-fadeout {
+  from { opacity: 1; }
+  to { opacity: 0; }
 }
 
 #error{
