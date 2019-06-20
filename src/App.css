@@ -13,6 +13,15 @@
   to { opacity: 1; }
 }
 
+#error{
+  color: rgb(49, 49, 49);
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+  transform: translateX(-50%); 
+}
+
 
 /* .App {
   text-align: center;

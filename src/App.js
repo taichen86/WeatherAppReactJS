@@ -1,70 +1,90 @@
 import React, {useState, useEffect} from 'react';
-import './App.css';
-import allOWMCities from './assets/city.list.json';
+import axios from 'axios';
+import allOWMCities from './assets/city.list.json'; // list of all cities from open weather map
 
+import './App.css';
 import WeatherPanel from './components/WeatherPanel';
-import { isTSEnumMember } from '@babel/types';
 import SearchBox from './components/SearchBox';
 
 
 
 function App() {
 
+  // Open Weather Map (OWM) API - get 5 day forecast by city
   const url = 'https://api.openweathermap.org/data/2.5/forecast?';
-  const apiKey = '21e9711869d651b73195343d41b52a78';
-  const [forecast, setForecast] = useState(null);
-  const [cityID, setCityID] = useState('6359304');  // initialize openweathermap location to Madrid
-  
-  const [cityImages, setCityImages] = useState(null); // json array of all available cities with images
-  const [bgImageCity, setBGImageCity] = useState('madrid'); // lowercase only, used to search teleport json for bg image
-  const [bgImageURL, setBGImageURL] = useState('weather-default.jpg');
-  const [bgClassList, setBGClassList ] = useState([]); // animate alpha for 'fade out' effect
+  // const url = 'https://api.openweathermap.org/data/2.5/forecastxxx?';
 
-  // const [searchMsg, setSearchMsg] = useState(''); // show msg if no city matched in openweathermap
+  const apiKey = '21e9711869d651b73195343d41b52a78';
+  const [forecast, setForecast] = useState( null );
+  const [cityID, setCityID] = useState( '6359304' ); // initialize OWM location to Madrid
+  
+  // Teleport API - get image for city
+  const teleportURL = 'https://api.teleport.org/api/urban_areas/';
+  // const teleportURL = 'https://api.teleport.org/api/urban_areasxxx/';
+
+  const [cityImages, setCityImages] = useState([]); // all available cities with images, initialised to prevent null ref
+  const [bgImageCity, setBGImageCity] = useState( 'madrid' ); // lowercase only, used to search teleport json for bg image
+  const [bgImageURL, setBGImageURL] = useState( null ); // if no teleport match, show default
+  const [bgClassList, setBGClassList ] = useState([]); // animate alpha for 'fade out' effect
+  const bgDefaultURL = 'weather-default.jpg';
+
+  const [msg, setMsg] = useState('');
+  const [error, setError] = useState( null );
  
 
-  // run this callback once as ComponentDidMount. Get json data from teleport for available city images
+  /*
+  run this callback once similar to ComponentDidMount 
+  get json data from teleport for list of available city images
+  */
   useEffect( () => {
-    // TODO: find current location?
     async function fetchMyAPI( ) {
-      console.log( 'initial useEffect, get cities images list')
-      const path = 'https://api.teleport.org/api/urban_areas/';
-      console.log( path );
-      const response = await fetch( path );
-      const data = await response.json();
-      setCityImages( data._links["ua:item"] );
-
+      try{
+        const result = await axios( teleportURL );
+        // console.log( 'teleport result ', result );
+        setCityImages( result.data._links["ua:item"] );
+      }catch(error){
+        setError( error );
+      }
     }
-    fetchMyAPI();
+    fetchMyAPI() 
+
   }, []);
 
-  // this callback runs 
+
+  // search OWM
   useEffect( () => {
-    console.log( 'fetch data effect' );
     async function fetchMyAPI( ) {
-      const path = url + 'id=' + cityID + '&appid=' + apiKey;
-      console.log( path );
-      const response = await fetch( path );
-      const data = await response.json();
-      setForecast( { city: data.city, reports: data.list } );
-      console.log( 'forecast', data );
+      try{
+        
+        const path = url + 'id=' + cityID + '&appid=' + apiKey;
+        // console.log( path );
+        const result = await axios( path );
+        // console.log( 'owm data ', result );
+        setForecast( { city: result.data.city, reports: result.data.list } );
+
+      }catch( error ){
+        setError( error );
+      }
     }  
     fetchMyAPI();
   }, [cityID] );
 
 
+  // search teleport
   useEffect( () => {
-    console.log( '=== UPDATE IMAGE BG ===' );
     async function fetchMyAPI( ) {
-      const path = 'https://api.teleport.org/api/urban_areas/slug:' + bgImageCity + '/images/';
-      console.log( bgImageCity );
-      const response = await fetch( path );
-      const data = await response.json();
-      console.log( 'BG IMG', data );
-      console.log( data.photos[0].image.web );
-      // change bg image url link
-      if( data.photos[0].image.web != undefined ){
-        setBGImageURL( data.photos[0].image.web );
+      const path = teleportURL + 'slug:' + bgImageCity + '/images/';
+      try{
+          const result = await axios( path );
+          // update bg url
+          console.log( 'teleport image data', result );
+          if( result.data.photos[0].image.web != undefined ){
+            setBGImageURL( result.data.photos[0].image.web );
+          }else{
+            setBGImageURL( bgDefaultURL );
+          }
+      }catch(error){
+        setError( error );
       }
 
     }  
@@ -73,46 +93,45 @@ function App() {
 
   useEffect( () => {
     setBGClassList( ['fadein'] );
-  },[bgImageURL]);
-
+  }, [bgImageURL]);
 
 
   function getForecastFor( cityname ){
     console.log( 'getForecastFor... ', cityname );
+    setMsg('');
     
     const weathermatch = allOWMCities.find( item => 
-      item.name.toLowerCase() == cityname.toLowerCase() ); // TODO: insert autocomplete?
+      item.name.toLowerCase() == cityname.toLowerCase() );
     
     if( weathermatch != undefined ){
 
-      // do not refresh same city search - same cityID will not trigger cityID & bgImageCity effects, resulting in blank screen
+      /*
+      do not refresh same city search - 
+      same cityID will not trigger cityID & bgImageCity effects, 
+      resulting in blank screen
+      */
       if( weathermatch.id == cityID ){
-        console.log( 'same city , do not refresh' );
+        // console.log( 'same city , do not refresh' );
         return;
       }
 
-      // set forecast and img url to null to 'fade out' weather panel
+      // need this reset to simulate fade in animation
       setForecast( null );
       setBGImageURL( null );
 
-      console.log( 'set null owm match found ', weathermatch );
+      // console.log( 'set null owm match found ', weathermatch );
       setCityID( weathermatch.id );
 
-      // search for bg image from teleport json list
       const imagematch = cityImages.find( item =>
         item.name.toLowerCase() == weathermatch.name.toLowerCase() );
-      // console.log( imagematch );
       if( imagematch != undefined ){
         setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() ); // teleport data hyphenates city names
       }else{
-        // use default city bg
-        setBGImageURL('weather-default.jpg');
+        setBGImageURL( bgDefaultURL );
       }
 
     }else{
-      // TODO: show error message - city not found
-      console.log( "NOT FOUND - SHOW ERROR");
-      // setSearchMsg( '*city not found' );
+      setMsg( '* no city with this name found' );
     }
   }
 
@@ -132,14 +151,16 @@ function App() {
 
     <div className="App">
 
-      <div style={styles.blurred} id="blurred-bg" className={bgClassList}>
-
-      </div>
-
+      <div style={styles.blurred} id="blurred-bg" className={bgClassList}></div>
+      
       { forecast && bgImageURL &&
       <WeatherPanel data={forecast} bgURL={bgImageURL} search={getForecastFor}></WeatherPanel> }
-      
-      <SearchBox search={getForecastFor}></SearchBox>
+
+      <SearchBox search={getForecastFor} msg={msg}></SearchBox>
+
+      <div id="error">
+          { error && error.message}
+      </div>
 
     </div>
   );

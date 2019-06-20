@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 
 import ForecastPanel from './ForecastPanel';
 import Clock from './Clock';
-import SearchBox from '../components/SearchBox';
 
 import '../style/main.css';
 import iconPressure from '../assets/stats-pressure.png';
@@ -12,18 +11,19 @@ import iconWind from '../assets/stats-wind.png';
 
 
 function WeatherPanel( props ){
+    // console.log( 'weather panel props: ', props );
 
-    useEffect( () => {  // TODO: change to setFadeIn
-        console.log( 'RERENDER - fade in bg image', document.getElementById('outer-panel').classList );
+    /* 
+    weather panel starts with 0 opacity.
+    add 'fadein' class upon initial render to trigger css fade in animation.
+    */
+    const [panelClassList, setPanelClassList] = useState([]);
+    useEffect( () => { 
         setPanelClassList( ['fadein'] );
     }, []);
 
-    const [panelClassList, setPanelClassList] = useState([]);
-
-    console.log( 'weather panel props: ', props );
 
     const currentWeather = props.data.reports[0];
-    console.log( 'current weather ', currentWeather );
     const currentTemp = (currentWeather.main.temp - 273.15).toFixed(0);
     const currentIconURL = 'http://openweathermap.org/img/w/' + currentWeather.weather[0].icon + '.png';
 
@@ -34,7 +34,6 @@ function WeatherPanel( props ){
             backgroundPosition: "center",
             backgroundSize: "cover"
         }
-
     }
 
     return(
@@ -81,7 +80,6 @@ function WeatherPanel( props ){
             </div>
 
             <ForecastPanel reports={props.data.reports}></ForecastPanel>
-
 
 
         </div>
