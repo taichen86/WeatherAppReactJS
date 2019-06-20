@@ -20,8 +20,8 @@ function DayCard( props ){
     return(
         <div id="day-panel" className={getPanelColor()}>
             <div>{daysText[day]}</div>
-            <div id="icon" className="day-icon">
-                <img src={iconURL} alt="icon"></img>
+            <div className="day-icon">
+                <img className="icon" src={iconURL} alt="icon"></img>
             </div>
             <div>+{tempC}&deg;</div>
         </div>

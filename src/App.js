@@ -47,7 +47,6 @@ function App() {
       }
     }
     fetchMyAPI() 
-
   }, []);
 
 
@@ -62,6 +61,7 @@ function App() {
         const path = url + 'id=' + cityID + '&appid=' + apiKey;
         const result = await axios( path );
         setForecast( { city: result.data.city, reports: result.data.list } );
+        // console.log( 'OWM results ==> ', result.data );
 
       }catch( error ){
         setError( error );
@@ -91,9 +91,16 @@ function App() {
       }
 
     }  
-    fetchMyAPI();
+    if( bgImageCity != null ){
+      fetchMyAPI();
+    }
   }, [bgImageCity] );
 
+
+  /*
+  bg images begin with 0 opacity
+  play fade in animation on rerender
+  */
   useEffect( () => {
     setBGClassList( ['fadein'] );
   }, [bgImageURL]);
@@ -119,18 +126,22 @@ function App() {
       setForecast( null );
       setBGImageURL( null );
 
+
       setCityID( weathermatch.id ); // this triggers search OWM useEffect 
 
       // see if we have image for this city in teleport cities list
-      const imagematch = cityImages.find( item =>
+      setBGImageCity( null );
+      const teleportmatch = cityImages.find( item =>
         item.name.toLowerCase() === weathermatch.name.toLowerCase() );
-      if( imagematch !== undefined ){
-        // teleport data hyphenates city names with multiple words
-        setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() ); 
+      if( teleportmatch !== undefined ){
+        /*
+        this triggers teleport image search
+        teleport data hyphenates city names with multiple words
+        */
+        setBGImageCity( teleportmatch.name.replace(' ', '-').toLowerCase() ); 
       }else{
         setBGImageURL( bgDefaultURL );
       }
-
     }else{
       setMsg( '* no city with this name found' );
     }
