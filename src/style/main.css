@@ -15,18 +15,17 @@
     width: 96%;
     left: 2%;
     top: 30px; 
-    opacity: 1;
-    transition-property: opacity;
-    transition-duration: 2s;
-	transition-timing-function: ease-in-out;
+    opacity: 0;
 }
 
-#outer-panel.hidden{
-    opacity: 0;
-    transition-property: opacity;
-    transition-duration: 2s;
-	transition-timing-function: ease-in-out;
+#outer-panel.fadein{
+    animation: panel-fadein 2s ease 0s 1 normal forwards;
 }
+
+@keyframes panel-fadein {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 
 .days-panel{
     display: flex;

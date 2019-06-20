@@ -15,13 +15,10 @@ function WeatherPanel( props ){
 
     useEffect( () => {  // TODO: change to setFadeIn
         console.log( 'RERENDER - fade in bg image', document.getElementById('outer-panel').classList );
-        document.getElementById( "outer-panel" ).classList = [];
-    });
+        setPanelClassList( ['fadein'] );
+    }, []);
 
-    // // search input passed back to WeatherPanel then back to App
-    // function search( input ){
-    //     props.search( input );
-    // }
+    const [panelClassList, setPanelClassList] = useState([]);
 
     console.log( 'weather panel props: ', props );
 
@@ -42,7 +39,7 @@ function WeatherPanel( props ){
 
     return(
 
-        <div id="outer-panel" className="hidden">
+        <div id="outer-panel" className={panelClassList}>
             <div style={styles.panel}>
                 <div id="inner-panel">
 

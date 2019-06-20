@@ -18,6 +18,7 @@ function App() {
   const [cityImages, setCityImages] = useState(null); // json array of all available cities with images
   const [bgImageCity, setBGImageCity] = useState('madrid'); // lowercase only, used to search teleport json for bg image
   const [bgImageURL, setBGImageURL] = useState('weather-default.jpg');
+  const [bgClassList, setBGClassList ] = useState([]); // animate alpha for 'fade out' effect
 
   // const [searchMsg, setSearchMsg] = useState(''); // show msg if no city matched in openweathermap
  
@@ -70,11 +71,14 @@ function App() {
     fetchMyAPI();
   }, [bgImageCity] );
 
+  useEffect( () => {
+    setBGClassList( ['fadein'] );
+  },[bgImageURL]);
+
 
 
   function getForecastFor( cityname ){
     console.log( 'getForecastFor... ', cityname );
-    // setSearchMsg('');
     
     const weathermatch = allOWMCities.find( item => 
       item.name.toLowerCase() == cityname.toLowerCase() ); // TODO: insert autocomplete?
@@ -128,7 +132,9 @@ function App() {
 
     <div className="App">
 
-      <div style={styles.blurred} className="bg-blurred"></div>
+      <div style={styles.blurred} id="blurred-bg" className={bgClassList}>
+
+      </div>
 
       { forecast && bgImageURL &&
       <WeatherPanel data={forecast} bgURL={bgImageURL} search={getForecastFor}></WeatherPanel> }
