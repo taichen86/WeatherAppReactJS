@@ -1,19 +1,21 @@
 import React from 'react';
+import '../style/main.css';
+
 
 function SearchBox( props ){
 
-    function handleClick(e){
-        // console.log( 'handle click: ', e );
-        if( e.key == 'Enter' ){
+
+    console.log( 'SearchBox props: ', props );
+    function handleClick( e ){
+        if( e.key == "Enter" ){
             console.log( '=== search : ', e.target.value );
             props.search( e.target.value );
         }
     }
 
     return( 
-        <div>
-            <input onKeyPress={handleClick} type="text" placeholder="search city..."></input>
-            <div>{props.msg}</div>
+        <div id="search-panel">
+            <input id="search-input" onKeyPress={handleClick} type="text" placeholder="search city..."></input>
         </div>
     );   
 

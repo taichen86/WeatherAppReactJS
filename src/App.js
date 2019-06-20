@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import './App.css';
-import allcities from './assets/city.list.json';
+import allOWMCities from './assets/city.list.json';
 
-import SearchBox from './components/SearchBox';
 import WeatherPanel from './components/WeatherPanel';
+import { isTSEnumMember } from '@babel/types';
+import SearchBox from './components/SearchBox';
 
 
 
@@ -18,19 +19,20 @@ function App() {
   const [bgImageCity, setBGImageCity] = useState('madrid'); // lowercase only, used to search teleport json for bg image
   const [bgImageURL, setBGImageURL] = useState('weather-default.jpg');
 
-  const [searchMsg, setSearchMsg] = useState(''); // show msg if no city matched in openweathermap
+  // const [searchMsg, setSearchMsg] = useState(''); // show msg if no city matched in openweathermap
+ 
 
-
-  // this callback runs only once after first render, similar to componentDidMount
+  // run this callback once as ComponentDidMount. Get json data from teleport for available city images
   useEffect( () => {
     // TODO: find current location?
     async function fetchMyAPI( ) {
-      console.log( 'initial useEffect, get cities list')
+      console.log( 'initial useEffect, get cities images list')
       const path = 'https://api.teleport.org/api/urban_areas/';
       console.log( path );
       const response = await fetch( path );
       const data = await response.json();
       setCityImages( data._links["ua:item"] );
+
     }
     fetchMyAPI();
   }, []);
@@ -72,9 +74,9 @@ function App() {
 
   function getForecastFor( cityname ){
     console.log( 'getForecastFor... ', cityname );
-    setSearchMsg('');
+    // setSearchMsg('');
     
-    const weathermatch = allcities.find( item => 
+    const weathermatch = allOWMCities.find( item => 
       item.name.toLowerCase() == cityname.toLowerCase() ); // TODO: insert autocomplete?
     
     if( weathermatch != undefined ){
@@ -89,7 +91,7 @@ function App() {
       setForecast( null );
       setBGImageURL( null );
 
-      console.log( 'owm match found ', weathermatch );
+      console.log( 'set null owm match found ', weathermatch );
       setCityID( weathermatch.id );
 
       // search for bg image from teleport json list
@@ -106,7 +108,7 @@ function App() {
     }else{
       // TODO: show error message - city not found
       console.log( "NOT FOUND - SHOW ERROR");
-      setSearchMsg( '*city not found' );
+      // setSearchMsg( '*city not found' );
     }
   }
 
@@ -129,10 +131,9 @@ function App() {
       <div style={styles.blurred} className="bg-blurred"></div>
 
       { forecast && bgImageURL &&
-      <WeatherPanel data={forecast} bgURL={bgImageURL}></WeatherPanel> }
+      <WeatherPanel data={forecast} bgURL={bgImageURL} search={getForecastFor}></WeatherPanel> }
       
-      <SearchBox search={getForecastFor} msg={searchMsg}></SearchBox>
-
+      <SearchBox search={getForecastFor}></SearchBox>
 
     </div>
   );

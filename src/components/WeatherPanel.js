@@ -1,41 +1,29 @@
 import React, {useState, useEffect} from 'react';
-import DayForecastCard from './DayForecastCard';
-import '../style/WeatherPanel.css';
+
+import ForecastPanel from './ForecastPanel';
 import Clock from './Clock';
+import SearchBox from '../components/SearchBox';
+
+import '../style/main.css';
+import iconPressure from '../assets/stats-pressure.png';
+import iconHumidity from '../assets/stats-humidity.png';
+import iconWind from '../assets/stats-wind.png';
 
 
 
 function WeatherPanel( props ){
 
     useEffect( () => {  // TODO: change to setFadeIn
-        console.log( 'RERENDER - fade in bg image' );
-        document.getElementById( "outterPanel" ).classList = [];
+        console.log( 'RERENDER - fade in bg image', document.getElementById('outer-panel').classList );
+        document.getElementById( "outer-panel" ).classList = [];
     });
+
+    // // search input passed back to WeatherPanel then back to App
+    // function search( input ){
+    //     props.search( input );
+    // }
 
     console.log( 'weather panel props: ', props );
-
-    // group data by date - keep highest temperature 
-    const days = [];
-    props.data.reports.forEach( item => {
-        const date = item.dt_txt.slice(0,10);
-        const samedate = days.find( day => day.dt_txt.includes( date ) );
-        
-        if( samedate == undefined ){
-            days.push( item );
-        }else{
-            if( item.main.temp > samedate.main.temp ){
-                days.pop();
-                days.push( item )
-            }
-        }
-    });
-    // console.log( days );
-
-    const daysPanel = days.map( (item, index) => {
-        return <DayForecastCard key={index} data={item}></DayForecastCard>
-    });
-    // console.log( daysPanel );
-
 
     const currentWeather = props.data.reports[0];
     console.log( 'current weather ', currentWeather );
@@ -54,9 +42,9 @@ function WeatherPanel( props ){
 
     return(
 
-        <div id="outterPanel" className="hidden">
+        <div id="outer-panel" className="hidden">
             <div style={styles.panel}>
-                <div id="innerPanel">
+                <div id="inner-panel">
 
                     <div className="title">
                         <div>{props.data.city.name}</div>
@@ -64,40 +52,44 @@ function WeatherPanel( props ){
                             <Clock></Clock>
                         </div>
                     </div>
+
+
                     <div id="current-panel">
-                        <div className="item temp">
+                        <div className="item" id="main-temp">
                             <span id="plus-sign">+</span>
                             <span id="main-temp">{currentTemp}</span>
                             <span>&deg;</span>
                         </div>
-                        <div className="item">
-                            <img id="main-icon" src={currentIconURL}></img>
-                            <div className="main">{currentWeather.weather[0].main}, {currentWeather.weather[0].description}</div>
+                        <div className="item" id="main-icon">
+                            <img src={currentIconURL}></img>
+                            <div id="main-description">{currentWeather.weather[0].main}, {currentWeather.weather[0].description}</div>
                         </div>
-                        <div className="item">
-                            <div>{currentWeather.main.pressure}mm Hg</div>
-                            <div>{currentWeather.main.humidity}% humidity</div>
-                            <div>{currentWeather.wind.speed}m/s </div>
+                        <div className="item" id="main-stats">
+                            <div>
+                                <img className="stats-icon" src={iconPressure}></img>
+                                {currentWeather.main.pressure}mm Hg
+                            </div>
+                            <div>
+                                <img className="stats-icon" src={iconHumidity}></img>
+                                {currentWeather.main.humidity}% humidity
+                            </div>
+                            <div>
+                                <img className="stats-icon" src={iconWind}></img>
+                                {currentWeather.wind.speed}m/s 
+                            </div>
                         </div>
                     </div>
                     
                 </div>
             </div>
 
-            <div className="days-panel">
-                {daysPanel}
-            </div> 
+            <ForecastPanel reports={props.data.reports}></ForecastPanel>
 
 
 
         </div>
     
-
-
-
     );
-
-
 }
 
 export default WeatherPanel;
