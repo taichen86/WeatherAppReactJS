@@ -22,7 +22,7 @@ function WeatherPanel( props ){
         setPanelClassList( ['fadein'] );
     }, []);
 
-
+    
     const currentWeather = props.data.reports[0];
     const currentTemp = (currentWeather.main.temp - 273.15).toFixed(0);
     const currentIconURL = 'http://openweathermap.org/img/w/' + currentWeather.weather[0].icon + '.png';

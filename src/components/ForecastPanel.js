@@ -24,7 +24,7 @@ function ForecastPanel( props ){
                 }
             }
         });
-        // console.log( days );
+        console.log( days );
     
         const daysPanel = days.map( (item, index) => {
             return <DayCard key={index} data={item}></DayCard>

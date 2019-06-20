@@ -40,7 +40,7 @@ function App() {
     async function fetchMyAPI( ) {
       try{
         const result = await axios( teleportURL );
-        // console.log( 'teleport result ', result );
+        console.log( 'teleport list result: ', result );
         setCityImages( result.data._links["ua:item"] );
       }catch(error){
         setError( error );
@@ -57,12 +57,11 @@ function App() {
   useEffect( () => {
     async function fetchMyAPI( ) {
       try{
-        
         const path = url + 'id=' + cityID + '&appid=' + apiKey;
+        console.log( 'OWM search ', path );
         const result = await axios( path );
         setForecast( { city: result.data.city, reports: result.data.list } );
-        // console.log( 'OWM results ==> ', result.data );
-
+        console.log( 'OWM results: ', result.data );
       }catch( error ){
         setError( error );
       }
@@ -80,11 +79,15 @@ function App() {
       const path = teleportURL + 'slug:' + bgImageCity + '/images/';
       try{
           const result = await axios( path );
+          console.log( 'teleport image sesarch: ', path );
           // update bg url
-          if( result.data.photos[0].image.web !== undefined ){
-            setBGImageURL( result.data.photos[0].image.web );
+          const link = result.data.photos[0].image.web;
+          if( link !== undefined ){
+            setBGImageURL( link );
+            console.log( 'got city image link: ', link );
           }else{
             setBGImageURL( bgDefaultURL );
+            console.log( 'use default bg image' );
           }
       }catch(error){
         setError( error );
@@ -120,7 +123,10 @@ function App() {
       same cityID will not trigger cityID & bgImageCity effects, 
       resulting in blank screen
       */
-      if( weathermatch.id === cityID ){ return; }
+      if( weathermatch.id === cityID ){ 
+        console.log( 'same city, return' );
+        return;
+      }
 
       // need this reset to simulate fade in animation
       setForecast( null );
@@ -143,6 +149,7 @@ function App() {
         setBGImageURL( bgDefaultURL );
       }
     }else{
+      console.log( 'no OWM match' );
       setMsg( '* no city with this name found' );
     }
   }

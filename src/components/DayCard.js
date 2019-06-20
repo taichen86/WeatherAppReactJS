@@ -9,7 +9,12 @@ function DayCard( props ){
     const daysText = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
     const day = new Date( props.data.dt_txt.slice(0,10) ).getDay();
 
-
+    /*
+    day forecast card color
+    800 clear: yellow
+    801-804 clouds: blue
+    other: grey
+    */
     function getPanelColor(){
         const id = props.data.weather[0].id.toString();
         if( id === '800' ){ return 'clear'; } 
