@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 function Clock(){
 
@@ -9,7 +9,17 @@ function Clock(){
         setTime( new Date() );
     }
 
-    setInterval( tick, 1000);
+    /*
+    return function in useEffect called when component dismounts
+    clearInterval on dismount, otherwise leads to memory leak
+    */
+    useEffect(() => {
+        const timerID = setInterval( () => tick(), 1000 );
+        return function cleanup() {
+            clearInterval( timerID );
+          };
+    }, []);
+
     return(
         <div>{time.toLocaleDateString( "en-US", options )}</div>
     );

@@ -15,7 +15,7 @@ function ForecastPanel( props ){
             const date = item.dt_txt.slice(0,10);
             const samedate = days.find( day => day.dt_txt.includes( date ) );
             
-            if( samedate == undefined ){
+            if( samedate === undefined ){
                 days.push( item );
             }else{
                 if( item.main.temp > samedate.main.temp ){

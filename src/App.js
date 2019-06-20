@@ -33,7 +33,7 @@ function App() {
  
 
   /*
-  run this callback once similar to ComponentDidMount 
+  run this callback once only similar to ComponentDidMount 
   get json data from teleport for list of available city images
   */
   useEffect( () => {
@@ -51,15 +51,16 @@ function App() {
   }, []);
 
 
-  // search OWM
+  /*
+  search OWM
+  called once upon initial render and every time cityID changes
+  */
   useEffect( () => {
     async function fetchMyAPI( ) {
       try{
         
         const path = url + 'id=' + cityID + '&appid=' + apiKey;
-        // console.log( path );
         const result = await axios( path );
-        // console.log( 'owm data ', result );
         setForecast( { city: result.data.city, reports: result.data.list } );
 
       }catch( error ){
@@ -70,15 +71,17 @@ function App() {
   }, [cityID] );
 
 
-  // search teleport
+  /* 
+  search teleport
+  called once upon initial render and then every time bgImageCity changes
+  */
   useEffect( () => {
     async function fetchMyAPI( ) {
       const path = teleportURL + 'slug:' + bgImageCity + '/images/';
       try{
           const result = await axios( path );
           // update bg url
-          console.log( 'teleport image data', result );
-          if( result.data.photos[0].image.web != undefined ){
+          if( result.data.photos[0].image.web !== undefined ){
             setBGImageURL( result.data.photos[0].image.web );
           }else{
             setBGImageURL( bgDefaultURL );
@@ -101,31 +104,29 @@ function App() {
     setMsg('');
     
     const weathermatch = allOWMCities.find( item => 
-      item.name.toLowerCase() == cityname.toLowerCase() );
+      item.name.toLowerCase() === cityname.toLowerCase() );
     
-    if( weathermatch != undefined ){
+    if( weathermatch !== undefined ){
 
       /*
       do not refresh same city search - 
       same cityID will not trigger cityID & bgImageCity effects, 
       resulting in blank screen
       */
-      if( weathermatch.id == cityID ){
-        // console.log( 'same city , do not refresh' );
-        return;
-      }
+      if( weathermatch.id === cityID ){ return; }
 
       // need this reset to simulate fade in animation
       setForecast( null );
       setBGImageURL( null );
 
-      // console.log( 'set null owm match found ', weathermatch );
-      setCityID( weathermatch.id );
+      setCityID( weathermatch.id ); // this triggers search OWM useEffect 
 
+      // see if we have image for this city in teleport cities list
       const imagematch = cityImages.find( item =>
-        item.name.toLowerCase() == weathermatch.name.toLowerCase() );
-      if( imagematch != undefined ){
-        setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() ); // teleport data hyphenates city names
+        item.name.toLowerCase() === weathermatch.name.toLowerCase() );
+      if( imagematch !== undefined ){
+        // teleport data hyphenates city names with multiple words
+        setBGImageCity( imagematch.name.replace(' ', '-').toLowerCase() ); 
       }else{
         setBGImageURL( bgDefaultURL );
       }

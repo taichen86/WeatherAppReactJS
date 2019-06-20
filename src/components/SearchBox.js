@@ -9,7 +9,7 @@ function SearchBox( props ){
 
     function handleClick( e ){
         setShowMsg( false ); // hide message when typing
-        if( e.key == "Enter" ){
+        if( e.key === "Enter" ){
             setShowMsg( true );
             // console.log( '=== search : ', e.target.value );
             props.search( e.target.value );
