@@ -12,7 +12,6 @@ function App() {
 
   // Open Weather Map (OWM) API - get 5 day forecast by city
   const url = 'https://api.openweathermap.org/data/2.5/forecast?';
-  // const url = 'https://api.openweathermap.org/data/2.5/forecastxxx?';
 
   const apiKey = '21e9711869d651b73195343d41b52a78';
   const [forecast, setForecast] = useState( null );
@@ -20,7 +19,6 @@ function App() {
   
   // Teleport API - get image for city
   const teleportURL = 'https://api.teleport.org/api/urban_areas/';
-  // const teleportURL = 'https://api.teleport.org/api/urban_areasxxx/';
 
   const [cityImages, setCityImages] = useState([]); // all available cities with images, initialised to prevent null ref
   const [bgImageCity, setBGImageCity] = useState( 'madrid' ); // lowercase only, used to search teleport json for bg image
@@ -34,7 +32,7 @@ function App() {
 
   /*
   run this callback once only similar to ComponentDidMount 
-  get json data from teleport for list of available city images
+  get json data from teleport for list cities with images
   */
   useEffect( () => {
     async function fetchMyAPI( ) {
@@ -102,7 +100,7 @@ function App() {
 
   /*
   bg images begin with 0 opacity
-  play fade in animation on rerender
+  play fade in animation on bg image rerender
   */
   useEffect( () => {
     setBGClassList( ['fadein'] );
@@ -113,11 +111,12 @@ function App() {
     console.log( 'getForecastFor... ', cityname );
     setMsg('');
     
+    // step 1: first search city name in open weather map
     const weathermatch = allOWMCities.find( item => 
       item.name.toLowerCase() == cityname.toLowerCase() );
     
     if( weathermatch !== undefined ){
-      console.log( 'match ', weathermatch );
+      console.log( 'OWM match ', weathermatch );
       /*
       do not refresh same city search - 
       same cityID will not trigger cityID & bgImageCity effects, 
@@ -135,7 +134,7 @@ function App() {
 
       setCityID( weathermatch.id ); // this triggers search OWM useEffect 
 
-      // see if we have image for this city in teleport cities list
+      // step2: see if we have image for this city in teleport cities list, if not use default
       setBGImageCity( null );
       const teleportmatch = cityImages.find( item =>
         item.name.toLowerCase() == weathermatch.name.toLowerCase() );
